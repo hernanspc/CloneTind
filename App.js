@@ -5,7 +5,7 @@ import tw from "tailwind-rn";
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Open up </Text>
+      <Text>Open upup HERNANsssss</Text>
       <Button title="Click me" />
     </View>
   );
