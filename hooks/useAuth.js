@@ -1,7 +1,13 @@
 import React, { createContext, useContext } from "react";
 import { View, Text } from "react-native";
 import * as Google from "expo-google-app-auth";
-import LogBoxInspectorContainer from "react-native/Libraries/LogBox/LogBoxInspectorContainer";
+import {
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  signInWithCredential,
+  signOut,
+} from "@firebase/auth";
+import { auth } from "../firebase";
 
 const AuthContext = createContext({});
 
@@ -18,8 +24,12 @@ export const AuthProvider = ({ children }) => {
   const signInWithGoogle = async () => {
     Google.logInAsync(config).then(async (logInResult) => {
       if (logInResult.type === "success") {
+        console.log("logInResult ", logInResult);
         //Login...
+        // const { idToken, accessToken } = logInResult;
+        // const credential = GoogleAuthProvider.credential(idToken, accessToken);
       }
+      // await signInWithCredential(credential);
     });
   };
 
