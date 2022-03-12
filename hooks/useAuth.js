@@ -26,10 +26,13 @@ export const AuthProvider = ({ children }) => {
       if (logInResult.type === "success") {
         console.log("logInResult ", logInResult);
         //Login...
-        // const { idToken, accessToken } = logInResult;
-        // const credential = GoogleAuthProvider.credential(idToken, accessToken);
+        const { idToken, accessToken } = logInResult;
+        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+
+        await signInWithCredential(auth, credential);
       }
-      // await signInWithCredential(credential);
+
+      return Promise.reject();
     });
   };
 
