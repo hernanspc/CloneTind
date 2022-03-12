@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "796198051959",
+    "project_id": "tinercode-faf61",
+    "storage_bucket": "tinercode-faf61.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796198051959:android:d6e4f78bd51ef1b8566672",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "796198051959-lbpts5n3f8okolqpigb58h0p3nog2pvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSOaHoEJMfmjmCQ661D2hS4M5rfWRZ_Xc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "796198051959-lbpts5n3f8okolqpigb58h0p3nog2pvv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "796198051959-drrnenoeecc612erkrived26dearsjdb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
