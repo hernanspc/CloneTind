@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { View, Text } from "react-native";
 import * as Google from "expo-google-app-auth";
 import {
@@ -21,19 +21,35 @@ const config = {
 };
 
 export const AuthProvider = ({ children }) => {
-  const signInWithGoogle = async () => {
-    Google.logInAsync(config).then(async (logInResult) => {
-      if (logInResult.type === "success") {
-        console.log("logInResult ", logInResult);
-        //Login...
-        const { idToken, accessToken } = logInResult;
-        const credential = GoogleAuthProvider.credential(idToken, accessToken);
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
-        await signInWithCredential(auth, credential);
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        //logged in
       }
-
-      return Promise.reject();
     });
+  }, []);
+
+  const signInWithGoogle = async () => {
+    Google.logInAsync(config)
+      .then(async (logInResult) => {
+        if (logInResult.type === "success") {
+          console.log("logInResult ", logInResult);
+          //Login...
+          const { idToken, accessToken } = logInResult;
+          const credential = GoogleAuthProvider.credential(
+            idToken,
+            accessToken
+          );
+
+          await signInWithCredential(auth, credential);
+        }
+
+        return Promise.reject();
+      })
+      .catch((error) => setError(error));
   };
 
   return (
