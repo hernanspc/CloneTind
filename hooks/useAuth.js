@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo,
+} from "react";
 import { View, Text } from "react-native";
 import * as Google from "expo-google-app-auth";
 import {
@@ -41,6 +47,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
+    console.log("button logout preess");
     setLoading(true);
     signOut(auth)
       .catch((error) => {
@@ -76,10 +83,19 @@ export const AuthProvider = ({ children }) => {
       });
   };
 
+  const memoValued = useMemo(
+    () => ({
+      user,
+      loading,
+      error,
+      signInWithGoogle,
+      logout,
+    }),
+    [user, loading, error]
+  );
+
   return (
-    <AuthContext.Provider
-      value={{ user, loading, error, signInWithGoogle, logout }}
-    >
+    <AuthContext.Provider value={memoValued}>
       {!loadingInitial && children}
     </AuthContext.Provider>
   );

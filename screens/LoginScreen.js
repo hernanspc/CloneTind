@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";
 import tw from "tailwind-rn";
 
 const LoginScreen = () => {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, loading } = useAuth();
 
   console.log("user: ", signInWithGoogle);
   return (
