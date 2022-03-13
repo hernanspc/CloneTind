@@ -23,11 +23,16 @@ const config = {
 export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
+  const [loadingInitial, setLoadingInitial] = useState(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         //logged in
+        setUser(user);
+      } else {
+        // NOT LOGED IN
+        setUser(null);
       }
     });
   }, []);
@@ -53,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user: null, signInWithGoogle }}>
+    <AuthContext.Provider value={{ user, signInWithGoogle }}>
       {children}
     </AuthContext.Provider>
   );
