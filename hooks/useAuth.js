@@ -23,7 +23,8 @@ const config = {
 export const AuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [user, setUser] = useState(null);
-  const [loadingInitial, setLoadingInitial] = useState(null);
+  const [loadingInitial, setLoadingInitial] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -31,14 +32,29 @@ export const AuthProvider = ({ children }) => {
         //logged in
         setUser(user);
       } else {
-        // NOT LOGED IN
+        // Not loged in
         setUser(null);
       }
+
+      setLoadingInitial(false);
     });
   }, []);
 
+  const logout = async () => {
+    setLoading(true);
+    signOut(auth)
+      .catch((error) => {
+        setError(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const signInWithGoogle = async () => {
-    Google.logInAsync(config)
+    setLoading(true);
+
+    await Google.logInAsync(config)
       .then(async (logInResult) => {
         if (logInResult.type === "success") {
           console.log("logInResult ", logInResult);
@@ -54,12 +70,17 @@ export const AuthProvider = ({ children }) => {
 
         return Promise.reject();
       })
-      .catch((error) => setError(error));
+      .catch((error) => setError(error))
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle }}>
-      {children}
+    <AuthContext.Provider
+      value={{ user, loading, error, signInWithGoogle, logout }}
+    >
+      {!loadingInitial && children}
     </AuthContext.Provider>
   );
 };
