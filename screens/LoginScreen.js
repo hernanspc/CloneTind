@@ -16,11 +16,11 @@ const LoginScreen = () => {
   const navigation = useNavigation();
   const { signInWithGoogle, loading } = useAuth();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerShown: false,
+  //   });
+  // }, []);
 
   console.log("user: ", signInWithGoogle);
   return (

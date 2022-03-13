@@ -7,11 +7,11 @@ const HomeScreen = () => {
   const navigation = useNavigation();
   const { logout } = useAuth();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    });
-  }, []);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerShown: false,
+  //   });
+  // }, []);
 
   return (
     <SafeAreaView>
