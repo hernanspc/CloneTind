@@ -13,14 +13,14 @@ import tw from "tailwind-rn";
 import useAuth from "../hooks/useAuth";
 
 const LoginScreen = () => {
-  const { signInWithGoogle, loading } = useAuth();
   const navigation = useNavigation();
+  const { signInWithGoogle, loading } = useAuth();
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerShow: false,
-  //   });
-  // }, []);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
 
   console.log("user: ", signInWithGoogle);
   return (
@@ -30,9 +30,20 @@ const LoginScreen = () => {
       <ImageBackground
         resizeMode="cover"
         style={tw("flex-1")}
-        source={{ uri: `https://tinder.com/static/tinder.png` }}
+        // source={{ uri: `https://tinder.com/static/tinder.png` }}
+        source={require(`../assets/app/costa_verde.jpg`)}
       >
-        <Text>Sign in & get swiping</Text>
+        <TouchableOpacity
+          style={[
+            tw("absolute bottom-40 w-52 bg-white p-4 rounded-2xl"),
+            { marginHorizontal: "25%" },
+          ]}
+          onPress={signInWithGoogle}
+        >
+          <Text style={tw("font-semibold text-center")}>
+            Sign in & get swiping
+          </Text>
+        </TouchableOpacity>
       </ImageBackground>
     </View>
   );
