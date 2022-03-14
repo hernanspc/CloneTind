@@ -14,7 +14,7 @@ import useAuth from "../hooks/useAuth";
 import { AntDesing, Entypo, Ionicons } from "@expo/vector-icons";
 import Swiper from "react-native-deck-swiper";
 import { db } from "../firebase";
-import { collection, doc, onSnapshot } from "@firebase/firestore";
+import { collection, doc, setDoc, onSnapshot } from "@firebase/firestore";
 
 const DUMMY_DATA = [
   {
@@ -108,7 +108,6 @@ const HomeScreen = () => {
 
   useLayoutEffect(() => {
     onSnapshot(doc(db, "users", user.uid), (snapshot) => {
-      console.log("log: :", snapshot);
       console.log("? ", !snapshot.exists);
       if (!snapshot.exists) {
         navigation.navigate("Modal");
@@ -122,24 +121,33 @@ const HomeScreen = () => {
     const fetchCards = async () => {
       unsub = onSnapshot(collection(db, "users"), (snapshot) => {
         setProfiles(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
+          snapshot.docs
+            .filter((doc) => doc.id !== user.uid)
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
         );
       });
     };
 
     fetchCards();
-    console.log("unsub ", unsub);
     return unsub;
   }, []);
 
-  console.log("profiles ", profiles);
+  const swipeLeft = (cardIndex) => {
+    if (!profiles[cardIndex]) return;
+    const userSwiped = profiles[cardIndex];
+    console.log(" userSwiped", userSwiped);
+    console.log(`you swiped pass on ${userSwiped.displayName} `);
+
+    // setDoc(doc(db, "users", user.uid, "passes", userSwiped.uid), userSwiped);
+  };
+
+  const swipeRight = async (cardIndex) => {};
 
   return (
     <SafeAreaView style={tw("flex-1")}>
-      {/*header*/}
       <View style={tw("flex-row items-center justify-between px-5")}>
         <TouchableOpacity onPress={logout}>
           <Image
@@ -170,11 +178,13 @@ const HomeScreen = () => {
           cardIndex={0}
           animateCardOpacity
           verticalSwipe={false}
-          onSwipedLeft={() => {
-            console.log("left");
+          onSwipedLeft={(cardIndex) => {
+            console.log("swipe Pass Left");
+            swipeLeft(cardIndex);
           }}
           onSwipedRight={() => {
             console.log("Right");
+            swipeRight(cardIndex);
           }}
           backgroundColor={"#4FD0E9"}
           overlayLabels={{
