@@ -18,73 +18,83 @@ const DUMMY_DATA = [
   {
     firstName: "Omar",
     lastName: "Perello",
-    occupation: "Veterinario",
+    job: "Veterinario",
     photoURL: "https://i.pravatar.cc/150?img=12",
     age: 19,
+    id: 101,
   },
   {
     firstName: "Maitane",
     lastName: "Carretero",
-    occupation: "Software Developer",
+    job: "Software Developer",
     photoURL: "https://i.pravatar.cc/150?img=47",
     age: 23,
+    id: 102,
   },
   {
     firstName: "Ion",
     lastName: "España",
-    occupation: "Graphic Design",
+    job: "Graphic Design",
     photoURL: "https://i.pravatar.cc/150?img=13",
     age: 20,
+    id: 103,
   },
   {
     firstName: "Tamara",
     lastName: "Diego",
-    occupation: "Graphic Design",
+    job: "Graphic Design",
     photoURL: "https://i.pravatar.cc/150?img=10",
     age: 20,
+    id: 104,
   },
   {
     firstName: "Shaggui",
     lastName: "Royer",
-    occupation: "Software Developer",
+    job: "Software Developer",
     photoURL:
       "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/9a/9ada927c72e6d02d394762a4725bfe46862cd527_full.jpg",
     age: 30,
+    id: 105,
   },
   {
     firstName: "Ezequiel",
     lastName: "Luis",
-    occupation: "Music",
+    job: "Music",
     photoURL: "https://i.pravatar.cc/150?img=11",
     age: 32,
+    id: 106,
   },
   {
     firstName: "Susana",
     lastName: "Escobar",
-    occupation: "Actrice",
+    job: "Actrice",
     photoURL: "https://i.pravatar.cc/150?img=32",
     age: 18,
+    id: 107,
   },
   {
     firstName: "Benjamin",
     lastName: "Dos-Santos",
-    occupation: "Actor",
+    job: "Actor",
     photoURL: "https://i.pravatar.cc/150?img=8",
     age: 21,
+    id: 108,
   },
   {
     firstName: "Thiago",
     lastName: "Stefano",
-    occupation: "Children",
+    job: "Children",
     photoURL: "https://i.pravatar.cc/150?img=4",
     age: 10,
+    id: 109,
   },
   {
     firstName: "Sara",
     lastName: "Maria Villa",
-    occupation: "House",
+    job: "House",
     photoURL: "https://i.pravatar.cc/150?img=39",
     age: 20,
+    id: 110,
   },
 ];
 
@@ -102,7 +112,7 @@ const HomeScreen = () => {
   console.log("photo ", user?.photoURL);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={tw("flex-1")}>
       {/*header*/}
       <View style={tw("flex-row items-center justify-between px-5")}>
         <TouchableOpacity onPress={logout}>
@@ -113,10 +123,10 @@ const HomeScreen = () => {
         </TouchableOpacity>
 
         <TouchableOpacity>
-          <Image
+          {/* <Image
             style={tw("h-14 w-14")}
             source={require(`../assets/logo/logo.png`)}
-          />
+          /> */}
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -126,12 +136,81 @@ const HomeScreen = () => {
           <Ionicons name="chatbubbles-sharp" size={30} color={"#FF5854"} />
         </TouchableOpacity>
       </View>
-
       {/*end header*/}
+
+      <View style={tw("flex-1 -mt-6")}>
+        <Swiper
+          containerStyle={{ backgroundColor: "transparent" }}
+          cards={DUMMY_DATA}
+          stackSize={10}
+          cardIndex={0}
+          animateCardOpacity
+          verticalSwipe={false}
+          overlayLabels={{
+            left: {
+              title: "NOPE",
+              style: {
+                label: {
+                  textAlign: "right",
+                  color: "red",
+                },
+              },
+            },
+            right: {
+              title: "MATCH",
+              style: {
+                label: {
+                  textAlign: "left",
+                  color: "#4DED30",
+                },
+              },
+            },
+          }}
+          renderCard={(card) => (
+            <View
+              key={card.id}
+              style={tw("relative bg-white h-3/4 rounded-xl")}
+            >
+              <Image
+                style={tw("absolute top-0 h-full w-full rounded-xl")}
+                source={{ uri: card.photoURL }}
+              />
+
+              <View
+                style={[
+                  tw(
+                    "absolute bottom-0 bg-white w-full flex-row justify-between items-between h-20 px-6 py-2 rounded-b-xl"
+                  ),
+                  styles.cardShadow,
+                ]}
+              >
+                <View>
+                  <Text style={tw("text-xl font-bold")}>
+                    {card.firstName} {card.lastName}
+                  </Text>
+                  <Text>{card.job}</Text>
+                </View>
+                <Text style={tw("text-2xl font-bold")}>{card.age}</Text>
+              </View>
+            </View>
+          )}
+        />
+      </View>
     </SafeAreaView>
   );
 };
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  cardShadow: {
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+});
