@@ -9,9 +9,9 @@ import {
 import React, { useState, useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/core";
 import tw from "tailwind-rn";
-import db from "../firebase";
 import useAuth from "../hooks/useAuth";
-import { serverTimestamp, setDoc } from "firebase/firestore";
+import { serverTimestamp, setDoc, doc } from "firebase/firestore";
+import { db } from "../firebase";
 
 const ModalScreen = () => {
   const navigation = useNavigation();
@@ -22,16 +22,7 @@ const ModalScreen = () => {
 
   const incompleteFrom = !image || !job || !age;
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerShown: true,
-  //     headerTitle: "Update Profile",
-  //     headerStyle: { backgroundColor: "#FF5864" },
-  //     headerTitleStyle: { color: "white" },
-  //   });
-  // }, []);
-
-  const UpdateUserProfile = () => {
+  const updateUserProfile = () => {
     setDoc(doc(db, "users", user.uid), {
       id: user.uid,
       displayName: user.displayName,
@@ -46,6 +37,17 @@ const ModalScreen = () => {
       .catch((error) => {
         alert(error.message);
       });
+  };
+
+  const test = async () => {
+    console.log("postt");
+    // console.log("added ", user.uid);
+    // Add a new document in collection "cities"
+    await setDoc(doc(db, "cities", "LA"), {
+      name: "Los Angeles",
+      state: "CA",
+      country: "USA",
+    });
   };
 
   return (
@@ -98,10 +100,17 @@ const ModalScreen = () => {
           tw("w-64 p-3 rounded-xl absolute bottom-10"),
           incompleteFrom ? tw("bg-gray-400") : tw("bg-red-400"),
         ]}
-        onPress={UpdateUserProfile}
+        onPress={updateUserProfile}
       >
         <Text style={tw("text-center text-white text-xl")}>Update Profile</Text>
       </TouchableOpacity>
+
+      {/* <TouchableOpacity
+        style={[tw("w-64 p-3 rounded-xl absolute bottom-20 bg-red-400")]}
+        onPress={test}
+      >
+        <Text style={tw("text-center text-white text-xl")}>Post</Text>
+      </TouchableOpacity> */}
     </View>
   );
 };
