@@ -114,17 +114,14 @@ const HomeScreen = () => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity>
-          {/* <Image
+        <TouchableOpacity onPress={() => navigation.navigate("Modal")}>
+          <Image
             style={tw("h-14 w-14")}
             source={require(`../assets/logo/logo.png`)}
-          /> */}
+          />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={tw("")}
-          onPress={() => navigation.navigate("Chat")}
-        >
+        <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
           <Ionicons name="chatbubbles-sharp" size={30} color={"#FF5854"} />
         </TouchableOpacity>
       </View>

@@ -25,8 +25,6 @@ const LoginScreen = () => {
   console.log("user: ", signInWithGoogle);
   return (
     <View style={tw("flex-1")}>
-      {/* <Text>{loading ? `loading....` : `Login to the app`}</Text>
-      <Button title="login" onPress={signInWithGoogle} /> */}
       <ImageBackground
         resizeMode="cover"
         style={tw("flex-1")}
