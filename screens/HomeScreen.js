@@ -13,92 +13,19 @@ import tw from "tailwind-rn";
 import useAuth from "../hooks/useAuth";
 import { AntDesing, Entypo, Ionicons } from "@expo/vector-icons";
 import Swiper from "react-native-deck-swiper";
+import {
+  collection,
+  doc,
+  onSnapshot,
+  query,
+  setDoc,
+  getDocs,
+  where,
+  getDoc,
+  serverTimestamp,
+} from "@firebase/firestore";
 import { db } from "../firebase";
-import { collection, doc, setDoc, onSnapshot } from "@firebase/firestore";
-
-const DUMMY_DATA = [
-  {
-    firstName: "Omar",
-    lastName: "Perello",
-    job: "Veterinario",
-    photoURL: "https://i.pravatar.cc/150?img=12",
-    age: 19,
-    id: 101,
-  },
-  {
-    firstName: "Maitane",
-    lastName: "Carretero",
-    job: "Software Developer",
-    photoURL: "https://i.pravatar.cc/150?img=47",
-    age: 23,
-    id: 102,
-  },
-  {
-    firstName: "Ion",
-    lastName: "España",
-    job: "Graphic Design",
-    photoURL: "https://i.pravatar.cc/150?img=13",
-    age: 20,
-    id: 103,
-  },
-  {
-    firstName: "Tamara",
-    lastName: "Diego",
-    job: "Graphic Design",
-    photoURL: "https://i.pravatar.cc/150?img=10",
-    age: 20,
-    id: 104,
-  },
-  {
-    firstName: "Shaggui",
-    lastName: "Royer",
-    job: "Software Developer",
-    photoURL:
-      "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/avatars/9a/9ada927c72e6d02d394762a4725bfe46862cd527_full.jpg",
-    age: 30,
-    id: 105,
-  },
-  {
-    firstName: "Ezequiel",
-    lastName: "Luis",
-    job: "Music",
-    photoURL: "https://i.pravatar.cc/150?img=11",
-    age: 32,
-    id: 106,
-  },
-  {
-    firstName: "Susana",
-    lastName: "Escobar",
-    job: "Actrice",
-    photoURL: "https://i.pravatar.cc/150?img=32",
-    age: 18,
-    id: 107,
-  },
-  {
-    firstName: "Benjamin",
-    lastName: "Dos-Santos",
-    job: "Actor",
-    photoURL: "https://i.pravatar.cc/150?img=8",
-    age: 21,
-    id: 108,
-  },
-  {
-    firstName: "Thiago",
-    lastName: "Stefano",
-    job: "Children",
-    photoURL: "https://i.pravatar.cc/150?img=4",
-    age: 10,
-    id: 109,
-  },
-  {
-    firstName: "Sara",
-    lastName: "Maria Villa",
-    job: "House",
-    photoURL: "https://i.pravatar.cc/150?img=39",
-    age: 20,
-    id: 110,
-  },
-];
+import generateId from "../lib/generateId";
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -108,7 +35,6 @@ const HomeScreen = () => {
 
   useLayoutEffect(() => {
     onSnapshot(doc(db, "users", user.uid), (snapshot) => {
-      console.log("? ", !snapshot.exists);
       if (!snapshot.exists) {
         navigation.navigate("Modal");
       }
@@ -119,32 +45,100 @@ const HomeScreen = () => {
     let unsub;
 
     const fetchCards = async () => {
-      unsub = onSnapshot(collection(db, "users"), (snapshot) => {
-        setProfiles(
-          snapshot.docs
-            .filter((doc) => doc.id !== user.uid)
-            .map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            }))
-        );
-      });
+      const passes = await getDocs(
+        collection(db, "users", user.uid, "passes")
+      ).then((snapshot) => snapshot.docs.map((doc) => doc.id));
+
+      const swipes = await getDocs(
+        collection(db, "users", user.uid, "swipes")
+      ).then((snapshot) => snapshot.docs.map((doc) => doc.id));
+
+      const passedUserIds = passes.length > 0 ? passes : ["test"];
+      const swipedUserIds = swipes.length > 0 ? swipes : ["test"];
+
+      unsub = onSnapshot(
+        query(
+          collection(db, "users"),
+          where("id", "not-in", [...passedUserIds, ...swipedUserIds])
+        ),
+        (snapshot) => {
+          setProfiles(
+            snapshot.docs
+              .filter((doc) => doc.id !== user.uid)
+              .map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }))
+          );
+        }
+      );
     };
 
     fetchCards();
     return unsub;
-  }, []);
+  }, [db]);
 
   const swipeLeft = (cardIndex) => {
     if (!profiles[cardIndex]) return;
     const userSwiped = profiles[cardIndex];
-    console.log(" userSwiped", userSwiped);
-    console.log(`you swiped pass on ${userSwiped.displayName} `);
+    console.log(`You swiped PASS on ${userSwiped.displayName} `);
 
-    // setDoc(doc(db, "users", user.uid, "passes", userSwiped.uid), userSwiped);
+    setDoc(doc(db, "users", user.uid, "passes", userSwiped.id), userSwiped);
   };
 
-  const swipeRight = async (cardIndex) => {};
+  const swipeRight = async (cardIndex) => {
+    if (!profiles[cardIndex]) return;
+
+    const userSwiped = profiles[cardIndex];
+    const loggedInProfile = await (
+      await getDoc(doc(db, "users", user.uid))
+    ).data();
+
+    //check if the user swiped
+    getDoc(doc(db, "users", userSwiped.id, "swipes", user.uid)).then(
+      (documentSnapshot) => {
+        console.log("in documentSnapshot");
+        if (documentSnapshot.exists()) {
+          console.log("1");
+          //user has matched whit before mached
+          //Create a match
+          console.log(`Hooray you macthed whit ${userSwiped.displayName} `);
+          setDoc(
+            doc(db, "users", user.uid, "swipes", userSwiped.id),
+            userSwiped
+          );
+
+          console.log("user.uid, userSwiped.id ", user.uid, userSwiped.id);
+          console.log("generated ", generateId(user.uid, userSwiped.id));
+          //CREATE A MATCH
+          setDoc(doc(db, "matches", generateId(user.uid, userSwiped.id)), {
+            users: {
+              [user.uid]: loggedInProfile,
+              [userSwiped.id]: userSwiped,
+            },
+            usersMatched: [user.uid, userSwiped.id],
+            timestamp: serverTimestamp(),
+          });
+
+          navigation.navigate("Match", {
+            loggedInProfile,
+            userSwiped,
+          });
+        } else {
+          console.log("2");
+
+          console.log(
+            `You swiped on ${userSwiped.displayName}  ${userSwiped.job}`
+          );
+
+          setDoc(
+            doc(db, "users", user.uid, "swipes", userSwiped.id),
+            userSwiped
+          );
+        }
+      }
+    );
+  };
 
   return (
     <SafeAreaView style={tw("flex-1")}>
@@ -179,11 +173,9 @@ const HomeScreen = () => {
           animateCardOpacity
           verticalSwipe={false}
           onSwipedLeft={(cardIndex) => {
-            console.log("swipe Pass Left");
             swipeLeft(cardIndex);
           }}
-          onSwipedRight={() => {
-            console.log("Right");
+          onSwipedRight={(cardIndex) => {
             swipeRight(cardIndex);
           }}
           backgroundColor={"#4FD0E9"}
