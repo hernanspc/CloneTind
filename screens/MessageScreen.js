@@ -97,21 +97,6 @@ const MessageScreen = () => {
           />
         </TouchableWithoutFeedback>
 
-        {/* <View
-          style={tw(
-            "flex-row justify-between  items-center border-t border-gray-200 px-5 py-2"
-          )}
-        >
-          <TextInput
-            style={tw("h-10 text-lg")}
-            placeholder="Send Message.."
-            onChangeText={setInput}
-            onSubmitEditing={sendMessage}
-            value={input}
-            selectionColor={"#FF5864"}
-          />
-          <Button onPress={sendMessage} title="Send" color="#FF5864" />
-        </View> */}
         <View style={styles.footer}>
           <TextInput
             style={styles.textInput}
