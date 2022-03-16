@@ -108,8 +108,6 @@ const HomeScreen = () => {
             userSwiped
           );
 
-          console.log("user.uid, userSwiped.id ", user.uid, userSwiped.id);
-          console.log("generated ", generateId(user.uid, userSwiped.id));
           //CREATE A MATCH
           setDoc(doc(db, "matches", generateId(user.uid, userSwiped.id)), {
             users: {

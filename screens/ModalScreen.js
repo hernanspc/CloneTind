@@ -39,17 +39,6 @@ const ModalScreen = () => {
       });
   };
 
-  const test = async () => {
-    console.log("postt");
-    // console.log("added ", user.uid);
-    // Add a new document in collection "cities"
-    await setDoc(doc(db, "cities", "LA"), {
-      name: "Los Angeles",
-      state: "CA",
-      country: "USA",
-    });
-  };
-
   return (
     <View style={tw("flex-1 items-center pt-1")}>
       <Image

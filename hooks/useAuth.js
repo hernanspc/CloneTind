@@ -47,7 +47,6 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const logout = async () => {
-    console.log("button logout preess");
     setLoading(true);
     signOut(auth)
       .catch((error) => {
