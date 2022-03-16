@@ -13,8 +13,8 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/core";
-import Header from "../components/Header";
 import tw from "tailwind-rn";
+import Header from "../components/Header";
 import getMatchedUserInfo from "../lib/getMatchedUserInfo";
 import useAuth from "../hooks/useAuth";
 import SenderMessage from "../components/SenderMessage";
@@ -82,8 +82,8 @@ const MessageScreen = () => {
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <FlatList
             data={messages}
-            style={tw("pl-4")}
             inverted={-1}
+            style={tw("pl-4")}
             keyExtractor={(item) => item.id}
             renderItem={({ item: message }) =>
               message.userId === user.uid ? (
@@ -94,22 +94,23 @@ const MessageScreen = () => {
             }
           />
         </TouchableWithoutFeedback>
+
+        <View
+          style={tw(
+            "flex-row justify-between  items-center border-t border-gray-200 px-5 py-2"
+          )}
+        >
+          <TextInput
+            style={tw("h-10 text-lg")}
+            placeholder="Send Message.."
+            onChangeText={setInput}
+            onSubmitEditing={sendMessage}
+            value={input}
+            selectionColor={"#FF5864"}
+          />
+          <Button onPress={sendMessage} title="Send" color="#FF5864" />
+        </View>
       </KeyboardAvoidingView>
-      <View
-        style={tw(
-          "flex-row justify-between  items-center border-t border-gray-200 px-5 py-2"
-        )}
-      >
-        <TextInput
-          style={tw("h-10 text-lg")}
-          placeholder="Send Message.."
-          onChangeText={setInput}
-          onSubmitEditing={sendMessage}
-          value={input}
-          selectionColor={"#FF5864"}
-        />
-        <Button onPress={sendMessage} title="Send" color="#FF5864" />
-      </View>
     </SafeAreaView>
   );
 };
