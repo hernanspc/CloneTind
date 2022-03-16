@@ -10,6 +10,7 @@ import {
   TouchableWithoutFeedback,
   FlatList,
   Keyboard,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/core";
@@ -27,6 +28,7 @@ import {
   query,
   orderBy,
 } from "@firebase/firestore";
+import { Ionicons } from "@expo/vector-icons";
 import { db } from "../firebase";
 
 const MessageScreen = () => {
@@ -95,7 +97,7 @@ const MessageScreen = () => {
           />
         </TouchableWithoutFeedback>
 
-        <View
+        {/* <View
           style={tw(
             "flex-row justify-between  items-center border-t border-gray-200 px-5 py-2"
           )}
@@ -109,6 +111,19 @@ const MessageScreen = () => {
             selectionColor={"#FF5864"}
           />
           <Button onPress={sendMessage} title="Send" color="#FF5864" />
+        </View> */}
+        <View style={styles.footer}>
+          <TextInput
+            style={styles.textInput}
+            placeholder="Send Message.."
+            onChangeText={setInput}
+            onSubmitEditing={sendMessage}
+            value={input}
+            selectionColor={"#FF5864"}
+          />
+          <TouchableOpacity onPress={sendMessage} activeOpacity={0.5}>
+            <Ionicons name="send" size={24} color="#FF5864" />
+          </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -117,4 +132,22 @@ const MessageScreen = () => {
 
 export default MessageScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    padding: 15,
+  },
+  textInput: {
+    bottom: 0,
+    height: 40,
+    flex: 1,
+    marginRight: 15,
+    borderColor: "transparent",
+    backgroundColor: "#ECECEC",
+    padding: 10,
+    color: "grey",
+    borderRadius: 30,
+  },
+});
