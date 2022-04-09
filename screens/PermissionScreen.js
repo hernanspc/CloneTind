@@ -10,11 +10,8 @@ import React, { useState, useLayoutEffect } from "react";
 import { useNavigation } from "@react-navigation/core";
 import tw from "tailwind-rn";
 import useAuth from "../hooks/useAuth";
-// import { serverTimestamp, setDoc, doc } from "firebase/firestore";
-// import { db, storage } from "../firebase";
 import { Avatar } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
-// import * as firebase from "firebase";
 
 const ModalScreen = () => {
   const navigation = useNavigation();
@@ -50,7 +47,7 @@ const ModalScreen = () => {
 
     console.log("blob ", JSON.stringify(blob));
 
-    const ref = firebase.storage().ref().child(`avatar/avatar-${user.uid}.jpg`);
+    const ref = firebase.storage().ref().child(`avatar/avatar-ratata.jpg`);
     console.log("ref ", ref);
     return ref.put(blob);
     // const spaceRef = ref(storage, `avatar/avatar-1.jpg`);
@@ -96,11 +93,11 @@ const ModalScreen = () => {
 
   return (
     <View style={tw("flex-1 items-center pt-1")}>
-      <Image
+      {/* <Image
         style={tw("h-20 w-full")}
         resizeMode="contain"
         source={{ uri: "https://links.papareact.com/2pf" }}
-      />
+      /> */}
 
       <Text style={tw("text-xl text-gray-500 p-2 font-bold")}>
         Welcome {user.displayName}
@@ -109,12 +106,12 @@ const ModalScreen = () => {
       <Text style={tw("text-center p-4 font-bold text-red-400")}>
         Step 1: The Profile Pic
       </Text>
-      <TextInput
+      {/* <TextInput
         value={image}
         onChangeText={(text) => setImage(text)}
         style={tw("text-center text-xl pb-2")}
         placeholder="Enter a Profile Pic URL"
-      />
+      /> */}
       <View
         style={
           {
@@ -136,7 +133,7 @@ const ModalScreen = () => {
           showEditButton
           containerStyle={{ marginRight: 20 }}
         >
-          <Avatar.Accessory size={23} />
+          {/* <Avatar.Accessory size={23} /> */}
         </Avatar>
       </View>
 
@@ -174,11 +171,11 @@ const ModalScreen = () => {
       </TouchableOpacity>
 
       {/* <TouchableOpacity
-        style={[tw("w-64 p-3 rounded-xl absolute bottom-20 bg-red-400")]}
-        onPress={test}
-      >
-        <Text style={tw("text-center text-white text-xl")}>Post</Text>
-      </TouchableOpacity> */}
+          style={[tw("w-64 p-3 rounded-xl absolute bottom-20 bg-red-400")]}
+          onPress={test}
+        >
+          <Text style={tw("text-center text-white text-xl")}>Post</Text>
+        </TouchableOpacity> */}
     </View>
   );
 };

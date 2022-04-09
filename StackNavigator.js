@@ -5,6 +5,7 @@ import HomeScreen from "./screens/HomeScreen";
 import ChatScreen from "./screens/ChatScreen";
 import LoginScreen from "./screens/LoginScreen";
 import ModalScreen from "./screens/ModalScreen";
+import PermissionScreen from "./screens/PermissionScreen";
 import MatchedScreen from "./screens/MatchedScreen";
 import MessageScreen from "./screens/MessageScreen";
 import useAuth from "./hooks/useAuth";
@@ -28,7 +29,7 @@ const StackNavigator = () => {
             <Stack.Screen name="Message" component={MessageScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "modal" }}>
-            <Stack.Screen name="Modal" component={ModalScreen} />
+            <Stack.Screen name="Modal" component={PermissionScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: "transparentModal" }}>
             <Stack.Screen name="Match" component={MatchedScreen} />
